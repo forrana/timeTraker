@@ -70,11 +70,21 @@ app.use('/graphql', expressGraphQL(req => ({
 
 app.use('/src', express.static(path.join(__dirname, '/client/src/')))
 
+
+app.get(/view/, (req, res) => {
+  if (req.user) {
+    res.sendFile(path.join(__dirname, '/client/index.html'));
+  } else {
+    res.send(`<p>Please, login! (<a href="/login/google">login</a>)</p>`);
+  }
+});
+
 app.get('/', (req, res) => {
   if (req.user) {
-    res.send(`<p>Welcome, ${req.user.email}! (<a href="/logout">logout</a>)</p>`);
-  } else {
+    console.log(req.user.email);
     res.sendFile(path.join(__dirname, '/client/index.html'));
+  } else {
+    res.send(`<p>Please, login! (<a href="/login/google">login</a>)</p>`);
   }
 });
 
